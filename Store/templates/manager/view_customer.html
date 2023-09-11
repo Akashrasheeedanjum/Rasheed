@@ -1,0 +1,117 @@
+{% extends 'manager/manager_dashbord.html' %}
+
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
+
+   
+</style>
+
+
+
+<div class="container bg-white mt-3">
+    <h1>Customer Details</h1>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date and Time</th>
+                    <th>Description</th>
+                    <th>Amount/Volume</th>
+                    <th>Price</th>
+                    <th>Balance</th>
+                    {% if request.user.is_staff %}
+                    <th>Action</th>
+                    {% else %}
+                  
+                  {% endif %} <!-- Add the Balance column -->
+                    <!-- Add other columns as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in combined_data %}
+                <tr>
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                            {{ entry.purchase_date }}
+                        {% elif entry.source == 'Expences' %}
+                            {{ entry.date }}
+                        {% else %}
+                            {{ entry.payment_date }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                            Milk Sale
+                        {% elif entry.source == 'Expences' %}
+                            {{ entry.expence_type }}
+                        {% else %}
+                            Payment
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                            {{ entry.volume }} liters
+                        {% elif entry.source == 'Expences' %}
+                            Rs {{ entry.expence_amount }}
+                        {% else %}
+                            Rs {{ entry.amount_received }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                            {{ entry.total_price }} liters
+                        {% else %}
+                            
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ entry.balance }}
+                    </td>
+
+                    {% if request.user.is_staff %}
+                    <td>
+
+                        {% if entry.source == 'MilkPurchase' %}
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-danger" onclick="return confirm('Are you sure to Delete ?')" href="{% url 'deleteSalePayment' entry.id pid %}">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </div>
+                        {% elif entry.source == 'Expences' %}
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-danger" onclick="return confirm('Are you sure to Delete ?')" href="{% url 'deleteExpence' entry.id pid %}">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </div>
+                        {% else %}
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-danger" onclick="return confirm('Are you sure to Delete ?')" href="{% url 'deleteCustomerPayment' entry.id pid %}">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </div>
+                        {% endif %}
+                    </td>
+                    {% else %}
+                  
+                  {% endif %}
+                    <!-- Add other columns as needed -->
+                </tr>
+            {% endfor %}
+                
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+

@@ -1,0 +1,39 @@
+{% extends 'manager/manager_dashbord.html' %}
+
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2>Received Payment</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="selectCenter">Select Customer</label>
+            <select class="form-control" id="selectCenter" name="customer_name" required>
+                <option value="">-- Select Center --</option>
+                {% for item in customers %}
+                <option value="{{item}}">{{item}}</option>
+                {% endfor %} 
+                
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="date_field">Select a date:</label>
+        <input type="date" id="date_field" placeholder="selected_date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="inputDescription">Payment Description</label>
+            <input type="text" class="form-control" id="inputDescription" name="node" placeholder="Enter payment description" required>
+        </div>
+        <div class="form-group">
+            <label for="inputAmount">Payment Amount</label>
+            <input type="number" class="form-control" id="inputAmount" name="amount" placeholder="Enter payment amount" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Received Payment</button>
+    </form>
+</div>
+
+
+
+
+{% endblock content %}

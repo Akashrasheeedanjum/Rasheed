@@ -1,0 +1,121 @@
+{% extends 'manager/manager_dashbord.html' %}
+
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
+
+   
+</style>
+
+
+
+<div class="container bg-white mt-3">
+    <h1>Milk Centers</h1>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date and Time</th>
+                    <th>Description</th>
+                    <th>Payment BY</th>
+                    <th>Amount/Volume</th>
+                    <th>Price</th>
+                    <th>Balance</th>
+                    {% if request.user.is_staff %}
+                    <th>Action</th>
+                    {% else %}
+                  
+                  {% endif %}  <!-- Add the Balance column -->
+                    <!-- Add other columns as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in combined_data %}
+                <tr>
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                            {{ entry.purchase_date }}
+                        {% else %}
+                            {{ entry.payment_date }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                            Milk Purchase
+                        {% else %}
+                            Payment
+                        {% endif %}
+                    </td>
+                    <!-- changing -->
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                            {{ entry.notes}}
+                        {% else %}
+                            {{ entry.notes }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                            {{ entry.volume }} liters
+                        {% else %}
+                            Rs {{ entry.amount }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                           Rs {{ entry.total_price }} 
+                        {% else %}
+                            
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ entry.balance }}
+                    </td>
+                    {% if request.user.is_staff %}
+                    <td>
+                        {% if entry.source == 'MilkPurchase' %}
+                        <div class="d-flex justify-content-center">
+                            <!-- <a class="btn btn-primary mr-2" href="{% url 'editCenterMilk' entry.id pid %}">
+                                <i class="fas fa-pencil"></i>
+                              </a> -->
+                            <a class="btn btn-danger" onclick="return confirm('Are you sure to Delete ?')" href="{% url 'deleteCenterMilk' entry.id pid %}">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                            
+                          </div>
+                        {% else %}
+                        <div class="d-flex justify-content-center">
+                            <!-- <a class="btn btn-primary mr-2" href="{% url 'deleteCenterMilk' entry.id pid %}">
+                                <i class="fas fa-pencil"></i>
+                              </a> -->
+                            <a class="btn btn-danger" onclick="return confirm('Are you sure to Delete ?')" href="{% url 'deleteCenterPayment' entry.id pid %}">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </div>
+                        {% endif %}
+                    </td>
+                    {% else %}
+                  
+                  {% endif %}
+
+                    
+                    <!-- Add other columns as needed -->
+                </tr>
+            {% endfor %}
+                
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+
